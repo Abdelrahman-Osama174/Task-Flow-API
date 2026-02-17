@@ -13,47 +13,47 @@ import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/task-lists/{task_list_id}/tasks")
+@RequestMapping("/api/v1/task-lists/{taskListId}/tasks")
 public class TaskController {
 
     private final TaskService taskService;
 
     @GetMapping("")
-    public ResponseEntity<List<TaskDto>> getTasks(@PathVariable("task_list_id") UUID taskListId) {
+    public ResponseEntity<List<TaskDto>> getTasks(@PathVariable("taskListId") UUID taskListId) {
         return ResponseEntity.ok(taskService.getTasks(taskListId));
     }
 
 
-    @GetMapping("/{task_id}")
+    @GetMapping("/{taskId}")
     public ResponseEntity<TaskDto> getTaskById(
-            @PathVariable("task_list_id") UUID taskListId,
-            @PathVariable("task_id") UUID taskId) {
+            @PathVariable("taskListId") UUID taskListId,
+            @PathVariable("taskId") UUID taskId) {
         return ResponseEntity.ok(taskService.getTaskById(taskListId, taskId));
     }
 
 
     @PostMapping("")
     public ResponseEntity<TaskDto> createTask(
-            @PathVariable("task_list_id") UUID taskListId,
+            @PathVariable("taskListId") UUID taskListId,
             @RequestBody TaskDto taskDto) {
 
         return new ResponseEntity<>(taskService.createTask(taskListId, taskDto), HttpStatus.CREATED);
     }
 
 
-    @PutMapping("/{task_id}")
+    @PutMapping("/{taskId}")
     public ResponseEntity<TaskDto> updateTask(
-            @PathVariable("task_list_id") UUID taskListId,
-            @PathVariable("task_id") UUID taskId,
+            @PathVariable("taskListId") UUID taskListId,
+            @PathVariable("taskId") UUID taskId,
             @RequestBody TaskDto taskDto) {
 
         return ResponseEntity.ok(taskService.updateTask(taskListId, taskId, taskDto));
     }
 
-    @DeleteMapping("/{task_id}")
+    @DeleteMapping("/{taskId}")
     public ResponseEntity<String> deleteTask(
-            @PathVariable("task_list_id") UUID taskListId,
-            @PathVariable("task_id") UUID taskId) {
+            @PathVariable("taskListId") UUID taskListId,
+            @PathVariable("taskId") UUID taskId) {
 
         taskService.deleteTask(taskListId, taskId);
         return ResponseEntity.ok("Task deleted successfully");

@@ -25,8 +25,8 @@ public class TaskListController {
     }
 
 
-    @GetMapping("/{task_list_id}")
-    public ResponseEntity<TaskListDto> getTaskList(@PathVariable("task_list_id") UUID id) {
+    @GetMapping("/{taskListId}")
+    public ResponseEntity<TaskListDto> getTaskList(@PathVariable("taskListId") UUID id) {
         return ResponseEntity.ok(taskListService.getTaskListById(id));
     }
 
@@ -37,17 +37,17 @@ public class TaskListController {
     }
 
 
-    @PutMapping("/{task_list_id}")
+    @PutMapping("/{taskListId}")
     public ResponseEntity<TaskListDto> updateTaskList(
-            @PathVariable("task_list_id") UUID id,
+            @PathVariable("taskListId") UUID id,
             @RequestBody TaskListDto taskListDto) {
 
         return ResponseEntity.ok(taskListService.updateTaskList(id, taskListDto));
     }
 
 
-    @DeleteMapping("/{task_list_id}")
-    public ResponseEntity<String> deleteTaskList(@PathVariable("task_list_id") UUID id) {
+    @DeleteMapping("/{taskListId}")
+    public ResponseEntity<String> deleteTaskList(@PathVariable("taskListId") UUID id) {
         taskListService.deleteTaskList(id);
         return ResponseEntity.ok().body("Task list deleted successfully");
     }
