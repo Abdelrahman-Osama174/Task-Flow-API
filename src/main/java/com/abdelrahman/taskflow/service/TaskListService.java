@@ -21,7 +21,7 @@ public class TaskListService {
 
 
     public List<TaskListDto> getTaskLists() {
-        return taskListRepo.findAll().stream()
+        return taskListRepo.findAllWithTasks().stream()
                 .map(taskListMapper::toDto)
                 .toList();
     }
