@@ -1,5 +1,6 @@
 package com.abdelrahman.taskflow.controller;
 
+import com.abdelrahman.taskflow.dto.ApiResponse;
 import com.abdelrahman.taskflow.dto.TaskListDto;
 import com.abdelrahman.taskflow.service.TaskListService;
 import lombok.RequiredArgsConstructor;
@@ -20,36 +21,43 @@ public class TaskListController {
 
 
     @GetMapping()
-    public ResponseEntity<List<TaskListDto>> getAllTaskLists() {
-        return ResponseEntity.ok(taskListService.getTaskLists());
+    public ResponseEntity<ApiResponse<?>> getAllTaskLists() {
+        List<TaskListDto> response = taskListService.getTaskLists();
+        return ResponseEntity.ok(ApiResponse.success(response, "Task lists retrieved successfully"));
     }
 
 
     @GetMapping("/{taskListId}")
-    public ResponseEntity<TaskListDto> getTaskList(@PathVariable("taskListId") UUID id) {
-        return ResponseEntity.ok(taskListService.getTaskListById(id));
+    public ResponseEntity<ApiResponse<?>> getTaskList(@PathVariable("taskListId") UUID id) {
+        TaskListDto response = taskListService.getTaskListById(id);
+        return ResponseEntity.ok(ApiResponse.success(response, "Task list retrieved successfully"));
     }
 
 
     @PostMapping()
-    public ResponseEntity<TaskListDto> createTaskList(@RequestBody TaskListDto taskListDto) {
-        return new ResponseEntity<>(taskListService.createTaskList(taskListDto), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<?>> createTaskList(@RequestBody TaskListDto taskListDto) {
+        TaskListDto response = taskListService.createTaskList(taskListDto);
+        return new ResponseEntity<>(
+                ApiResponse.success(response, "Task list created successfully"),
+                HttpStatus.CREATED
+        );
     }
 
 
     @PutMapping("/{taskListId}")
-    public ResponseEntity<TaskListDto> updateTaskList(
+    public ResponseEntity<ApiResponse<?>> updateTaskList(
             @PathVariable("taskListId") UUID id,
             @RequestBody TaskListDto taskListDto) {
 
-        return ResponseEntity.ok(taskListService.updateTaskList(id, taskListDto));
+        TaskListDto response = taskListService.updateTaskList(id, taskListDto);
+        return ResponseEntity.ok(ApiResponse.success(response, "Task list updated successfully"));
     }
 
 
     @DeleteMapping("/{taskListId}")
-    public ResponseEntity<String> deleteTaskList(@PathVariable("taskListId") UUID id) {
+    public ResponseEntity<ApiResponse<?>> deleteTaskList(@PathVariable("taskListId") UUID id) {
         taskListService.deleteTaskList(id);
-        return ResponseEntity.ok().body("Task list deleted successfully");
+        return ResponseEntity.ok(ApiResponse.success(null, "Task list deleted successfully"));
     }
 
 }

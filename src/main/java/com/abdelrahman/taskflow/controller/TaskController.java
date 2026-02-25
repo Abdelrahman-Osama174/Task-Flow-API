@@ -1,5 +1,6 @@
 package com.abdelrahman.taskflow.controller;
 
+import com.abdelrahman.taskflow.dto.ApiResponse;
 import com.abdelrahman.taskflow.dto.TaskDto;
 import com.abdelrahman.taskflow.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -19,44 +20,52 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping("")
-    public ResponseEntity<List<TaskDto>> getTasks(@PathVariable("taskListId") UUID taskListId) {
-        return ResponseEntity.ok(taskService.getTasks(taskListId));
+    public ResponseEntity<ApiResponse<?>> getTasks(@PathVariable("taskListId") UUID taskListId) {
+        List<TaskDto> response = taskService.getTasks(taskListId);
+        return ResponseEntity.ok(ApiResponse.success(response, "Tasks retrieved successfully"));
     }
 
 
     @GetMapping("/{taskId}")
-    public ResponseEntity<TaskDto> getTaskById(
+    public ResponseEntity<ApiResponse<?>> getTaskById(
             @PathVariable("taskListId") UUID taskListId,
             @PathVariable("taskId") UUID taskId) {
-        return ResponseEntity.ok(taskService.getTaskById(taskListId, taskId));
+
+        TaskDto response = taskService.getTaskById(taskId, taskListId);
+        return ResponseEntity.ok(ApiResponse.success(response, "Task retrieved successfully"));
     }
 
 
     @PostMapping("")
-    public ResponseEntity<TaskDto> createTask(
+    public ResponseEntity<ApiResponse<?>> createTask(
             @PathVariable("taskListId") UUID taskListId,
             @RequestBody TaskDto taskDto) {
 
-        return new ResponseEntity<>(taskService.createTask(taskListId, taskDto), HttpStatus.CREATED);
+        TaskDto response = taskService.createTask(taskListId, taskDto);
+        return new ResponseEntity<>(
+                ApiResponse.success(response, "Task Created successfully"),
+                HttpStatus.CREATED
+        );
     }
 
 
     @PutMapping("/{taskId}")
-    public ResponseEntity<TaskDto> updateTask(
+    public ResponseEntity<ApiResponse<?>> updateTask(
             @PathVariable("taskListId") UUID taskListId,
             @PathVariable("taskId") UUID taskId,
             @RequestBody TaskDto taskDto) {
 
-        return ResponseEntity.ok(taskService.updateTask(taskListId, taskId, taskDto));
+        TaskDto response = taskService.updateTask(taskListId, taskId, taskDto);
+        return ResponseEntity.ok(ApiResponse.success(response, "Task Updated successfully"));
     }
 
     @DeleteMapping("/{taskId}")
-    public ResponseEntity<String> deleteTask(
+    public ResponseEntity<ApiResponse<?>> deleteTask(
             @PathVariable("taskListId") UUID taskListId,
             @PathVariable("taskId") UUID taskId) {
 
         taskService.deleteTask(taskListId, taskId);
-        return ResponseEntity.ok("Task deleted successfully");
+        return ResponseEntity.ok(ApiResponse.success(null, "Task deleted successfully"));
     }
 
 }
